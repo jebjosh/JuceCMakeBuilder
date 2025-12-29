@@ -1,0 +1,221 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 22,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": "base",
+            "displayName": "Release",
+            "description": "Release build with optimizations",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "debug",
+            "inherits": "base",
+            "displayName": "Debug",
+            "description": "Debug build with symbols",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "macos-release",
+            "inherits": "release",
+            "displayName": "macOS Release (Universal)",
+            "description": "macOS Universal Binary release build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "x86_64;arm64",
+                "CMAKE_OSX_DEPLOYMENT_TARGET": "10.13"
+            }
+        },
+        {
+            "name": "macos-debug",
+            "inherits": "debug",
+            "displayName": "macOS Debug (Universal)",
+            "description": "macOS Universal Binary debug build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "x86_64;arm64",
+                "CMAKE_OSX_DEPLOYMENT_TARGET": "10.13"
+            }
+        },
+        {
+            "name": "macos-arm64-release",
+            "inherits": "release",
+            "displayName": "macOS Release (ARM64 only)",
+            "description": "macOS Apple Silicon only release build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "arm64",
+                "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0"
+            }
+        },
+        {
+            "name": "macos-x64-release",
+            "inherits": "release",
+            "displayName": "macOS Release (x64 only)",
+            "description": "macOS Intel only release build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "x86_64",
+                "CMAKE_OSX_DEPLOYMENT_TARGET": "10.13"
+            }
+        },
+        {
+            "name": "macos-xcode-release",
+            "inherits": "macos-release",
+            "displayName": "macOS Xcode Release",
+            "description": "macOS Xcode project for release",
+            "generator": "Xcode"
+        },
+        {
+            "name": "windows-release",
+            "inherits": "release",
+            "displayName": "Windows Release",
+            "description": "Windows release build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "windows-debug",
+            "inherits": "debug",
+            "displayName": "Windows Debug",
+            "description": "Windows debug build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "windows-vs2022",
+            "displayName": "Windows Visual Studio 2022",
+            "description": "Windows Visual Studio 2022 solution",
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "binaryDir": "${sourceDir}/build/vs2022",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "linux-release",
+            "inherits": "release",
+            "displayName": "Linux Release",
+            "description": "Linux release build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "linux-debug",
+            "inherits": "debug",
+            "displayName": "Linux Debug",
+            "description": "Linux debug build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "release",
+            "configurePreset": "release",
+            "configuration": "Release"
+        },
+        {
+            "name": "debug",
+            "configurePreset": "debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "macos-release",
+            "configurePreset": "macos-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "macos-debug",
+            "configurePreset": "macos-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "macos-xcode-release",
+            "configurePreset": "macos-xcode-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-release",
+            "configurePreset": "windows-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-debug",
+            "configurePreset": "windows-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "windows-vs2022-release",
+            "configurePreset": "windows-vs2022",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-vs2022-debug",
+            "configurePreset": "windows-vs2022",
+            "configuration": "Debug"
+        },
+        {
+            "name": "linux-release",
+            "configurePreset": "linux-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "linux-debug",
+            "configurePreset": "linux-debug",
+            "configuration": "Debug"
+        }
+    ]
+}
