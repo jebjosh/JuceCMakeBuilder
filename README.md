@@ -1,6 +1,6 @@
-# DX10 FM Synthesizer
+# Juce Synthesizer builder
 
-A classic FM synthesizer plugin built with JUCE 8, inspired by the legendary DX series.
+plugin built with JUCE 8
 
 ## Supported Formats
 
