@@ -33,7 +33,7 @@ set(JUCE_PATH "" CACHE PATH "Path to JUCE framework")
 if(APPLE)
     set(DEFAULT_JUCE_PATH "/Applications/JUCE")
 elseif(WIN32)
-    set(DEFAULT_JUCE_PATH "C:/JUCE")
+    set(DEFAULT_JUCE_PATH "C:/Users/JEB/source/repos/JUCE")
 else()
     set(DEFAULT_JUCE_PATH "")
 endif()
@@ -76,7 +76,7 @@ endif()
 
 # Company and plugin identifiers
 #rename defaults here
-set(COMPANY_NAME "JEbjosh")
+set(COMPANY_NAME "jebjosh")
 set(COMPANY_CODE "Jebj")
 set(PLUGIN_CODE "DX10")
 set(BUNDLE_ID "com.jebjosh.dx10")
