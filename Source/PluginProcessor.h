@@ -1,7 +1,6 @@
 #pragma once
 
-#include <juce_audio_processors/juce_audio_processors.h>
-#include <juce_audio_utils/juce_audio_utils.h>
+#include "JuceHeader.h"
 
 const int NPARAMS = 16;       // number of parameters
 const int NVOICES = 8;        // max polyphony
@@ -49,6 +48,9 @@ struct Voice
     float mdec;  // decay multiplier
 };
 
+// Forward declaration
+class SpectrumAnalyzer;
+
 class DX10AudioProcessor : public juce::AudioProcessor
 {
 public:
@@ -82,13 +84,24 @@ public:
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
-    juce::AudioProcessorValueTreeState apvts { *this, nullptr, "Parameters", createParameterLayout() };
+    // UndoManager for undo/redo support
+    juce::UndoManager undoManager;
+    
+    // APVTS with UndoManager
+    juce::AudioProcessorValueTreeState apvts { *this, &undoManager, "Parameters", createParameterLayout() };
 
     // Get the number of available presets
     int getNumPresets() const { return static_cast<int>(_programs.size()); }
     
     // Get preset name by index
     juce::String getPresetName(int index) const;
+    
+    // Set the current preset name (for user presets)
+    void setCurrentPresetName(const juce::String& name) { _currentPresetName = name; }
+    juce::String getCurrentPresetName() const { return _currentPresetName; }
+    
+    // Spectrum analyzer data access
+    void setSpectrumAnalyzer(SpectrumAnalyzer* analyzer) { spectrumAnalyzer = analyzer; }
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
@@ -99,15 +112,15 @@ private:
     void createPrograms();
     void processEvents(juce::MidiBuffer &midiMessages);
     void noteOn(int note, int velocity);
-    
-    // Called when preset parameter changes
-    void loadPresetParameters(int presetIndex);
 
     // The factory presets.
     std::vector<DX10Program> _programs;
 
     // Index of the active preset (kept in sync with PresetIndex parameter)
     int _currentProgram;
+    
+    // Current preset name (for display, especially for user presets)
+    juce::String _currentPresetName;
 
     // The current sample rate and 1 / sample rate.
     float _sampleRate, _inverseSampleRate;
@@ -191,8 +204,15 @@ private:
     // Pitch bend value.
     float _pitchBend;
     
-    // Listener for preset parameter changes
-    std::atomic<int> _pendingPresetLoad { -1 };
+    // Output section parameters
+    float _outputGain = 1.0f;  // 0dB default
+    float _saturation = 0.0f;
+    
+    // Flag to prevent setCurrentProgram from overwriting restored state
+    bool _isRestoringState = false;
+    
+    // Pointer to spectrum analyzer (set by editor)
+    SpectrumAnalyzer* spectrumAnalyzer = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DX10AudioProcessor)
 };

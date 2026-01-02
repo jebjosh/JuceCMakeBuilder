@@ -1,5 +1,11 @@
+#Make sure to copy the JuceHeader.h 
+#and rename the <JuceHeader.h> to "JuceHeader.h"
 #First build release Project
+# macOS/Linux
+chmod +x build.sh && ./build.sh
 
+# Windows
+build.bat
 
 
 #Second Code sign
@@ -56,7 +62,7 @@ xcrun stapler staple "DX10_vst3.zip"
 xcrun stapler staple "DX10_au.zip"
 
 
-# sith Make a folder for vst3 and Component and copy the vst3 and component inside those folders respectively
+# sixth Make a folder for vst3 and Component and copy the vst3 and component inside those folders respectively
 
 
 
@@ -78,5 +84,18 @@ pkgbuild --identifier com.jebjosh.dx10 \
          --component VST3/DX10.vst3 \
          --component COMPONENTS/DX10.component \
          --scripts scripts \
-         --install-location /Library/Audio/Plug-Ins \ DX10_Installer3.pkg 
+         --install-location /Library/Audio/Plug-Ins \DX10_InstallerBuild.pkg
+
+productsign --sign \
+"Developer ID Installer: Developer Fullname (ActualKeyNumber)" \
+DX10_InstallerBuild.pkg JebDX10-signed.pkg
+
+xcrun notarytool submit JebDX10-signed.pkg \
+--apple-id "example@email.com" \
+--team-id "ActualKeyNumber" \
+--password "actual-pass-word" \
+--wait
          
+
+xcrun stapler staple "JebDX10-signed.pkg"
+xcrun stapler staple "DX10_InstallerBuild.pkg"

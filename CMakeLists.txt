@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 # Project name and version
 project(DX10
-    VERSION 1.0.0
+    VERSION 2.0.0
     DESCRIPTION "DX10 FM Synthesizer"
     LANGUAGES C CXX
 )
@@ -76,8 +76,8 @@ endif()
 
 # Company and plugin identifiers
 #rename defaults here
-set(COMPANY_NAME "JEbjosh")
-set(COMPANY_CODE "Jebj")
+set(COMPANY_NAME "jebjosh")
+set(COMPANY_CODE "JEBJ")
 set(PLUGIN_CODE "DX10")
 set(BUNDLE_ID "com.jebjosh.dx10")
 
@@ -142,12 +142,15 @@ juce_add_plugin(DX10
 
 target_sources(DX10
     PRIVATE
+        Source/JuceHeader.h
         Source/PluginProcessor.cpp
         Source/PluginProcessor.h
         Source/PluginEditor.cpp
         Source/PluginEditor.h
         Source/CustomLookAndFeel.h
         Source/RotaryKnobWithLabel.h
+        Source/PresetManager.h
+        Source/SpectrumAnalyzer.h
 )
 
 # =============================================================================
@@ -170,7 +173,9 @@ target_link_libraries(DX10
         juce::juce_audio_formats
         juce::juce_audio_plugin_client
         juce::juce_audio_processors
+        juce::juce_audio_processors_headless
         juce::juce_audio_utils
+        juce::juce_dsp
         
     PUBLIC
         # Recommended flags for plugin development
