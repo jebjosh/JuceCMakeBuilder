@@ -1,0 +1,20 @@
+#!/bin/bash
+
+TARGET_VOLUME="$3"
+
+CURRENT_USER=$(stat -f "%Su" /dev/console)
+USER_HOME=$(dscl . -read /Users/"$CURRENT_USER" NFSHomeDirectory | awk '{print $2}')
+
+PRESET_SRC="$TARGET_VOLUME/Library/Audio/Plug-ins/DX10"
+PRESET_DEST="$USER_HOME/Documents/DX10 Presets"
+
+mkdir -p "$PRESET_DEST"
+
+if [ -d "$PRESET_SRC" ]; then
+    cp -R "$PRESET_SRC/"* "$PRESET_DEST/"
+    chown -R "$CURRENT_USER":staff "$PRESET_DEST"
+fi
+
+rm -rf "$PRESET_SRC"
+
+exit 0
