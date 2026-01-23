@@ -1,0 +1,23 @@
+#!/bin/bash
+# Preinstall script for JEBFM1
+# Removes old plugin versions before installing new ones
+
+VST3_PATH="/Library/Audio/Plug-Ins/VST3/JEBFM1.vst3"
+AU_PATH="/Library/Audio/Plug-Ins/Components/JEBFM1.component"
+
+echo "Running JEBFM1 preinstall cleanup..."
+
+# Remove old VST3
+if [ -d "$VST3_PATH" ]; then
+    echo "Removing old VST3: $VST3_PATH"
+    rm -rf "$VST3_PATH"
+fi
+
+# Remove old AU
+if [ -d "$AU_PATH" ]; then
+    echo "Removing old AU: $AU_PATH"
+    rm -rf "$AU_PATH"
+fi
+
+echo "Preinstall cleanup complete."
+exit 0
